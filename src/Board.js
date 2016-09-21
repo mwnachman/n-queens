@@ -79,11 +79,11 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
+      var boardMatrix = this.rows();
       var thisN= this.get('n');
       var counter = 0;
       for (var i = 0; i < thisN; i++) {
         if (boardMatrix[rowIndex][i] === 1) {
-          console.log(boardMatrix[rowIndex][i]);
           counter++;
           if (counter > 1){
             return true;
@@ -98,7 +98,6 @@
       var boardMatrix = this.rows();
       var thisN = this.get('n');
       for (var i = 0; i < thisN; i++) {
-
         if (this.hasRowConflictAt(i)) {
           return true;
         }
@@ -113,11 +112,29 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+      var boardMatrix = this.rows();
+      var thisN = this.get('n');
+      var counter = 0;
+      for (var i = 0; i < thisN; i++) {
+        if (boardMatrix[i][colIndex] === 1) {
+          counter++;
+          if (counter > 1) {
+            return true;
+          }
+        }
+      }
       return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      var boardMatrix = this.rows();
+      var thisN= this.get('n');
+      for (var i = 0; i < thisN; i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
