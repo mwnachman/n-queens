@@ -145,11 +145,34 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      var boardMatrix = this.rows();
+      var thisN = this.get('n');
+      var counter = 0;
+      for (var i = 0; i < thisN; i++) {
+        if (boardMatrix[i][majorDiagonalColumnIndexAtFirstRow] === 1) {
+          counter++;
+        }
+        majorDiagonalColumnIndexAtFirstRow++;
+        }
+        if (counter > 1) {
+            return true;
+      }
       return false; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      var boardMatrix = this.rows();
+      var thisN = this.get('n');
+      for (var i = 0 - thisN; i < thisN; i++) {
+        //like the functions for minor diagonal conflicts, this one could have an issue
+        //at some later point becuase we start counting at 0 - thisN instead of 0, so 
+        //we are looking at indexes outside of the range of the actual Rows
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+
       return false; // fixme
     },
 
@@ -160,11 +183,40 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      var boardMatrix = this.rows();
+      var thisN = this.get('n');
+      var counter = 0;
+      for (var i = 0; i < thisN; i++) {
+        if (boardMatrix[i][minorDiagonalColumnIndexAtFirstRow] === 1) {
+          counter++;
+        }
+        minorDiagonalColumnIndexAtFirstRow--;
+        }
+        if (counter > 1) {
+            return true;
+      }
       return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      var boardMatrix = this.rows();
+      var thisN = this.get('n');
+      for (var i = 0; i < (thisN * 2); i++) {
+        //thisN * 2 is a fix to make the function keep looking for diagonal conflicts
+        //in diagonals that would have a minorDiagonalColumnIndexAtFirstRow beyond the 
+        //range of the array, for instance in an array like this:
+        //[0, 0, 0, 0],
+        //[0, 0, 0, 0],
+        //[0, 0, 0, 1],
+        //[0, 0, 1, 0]
+        //Keep in mind that perhaps this causes conflicts later if something checks
+        //for Row index numbers outside of the range of the Row's actual range.
+        //Might have to add an ._isInBounds test
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
       return false; // fixme
     }
 
