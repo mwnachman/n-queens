@@ -74,9 +74,10 @@ window.findNQueensSolution = function(n) {
       board.togglePiece(rowStart, i);
     }
   };
+
   if (n === 2 || n === 3) {
     return board.rows();
-
+  }
   solution = positionQueens(board, 0);
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
