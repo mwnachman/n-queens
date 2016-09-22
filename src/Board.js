@@ -79,18 +79,10 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      var boardMatrix = this.rows();
-      var thisN= this.get('n');
-      var counter = 0;
-      for (var i = 0; i < thisN; i++) {
-        if (boardMatrix[rowIndex][i] === 1) {
-          counter++;
-          if (counter > 1){
-            return true;
-          }
-        }
-      }
-      return false; 
+      var conflict = _.reduce(this.get(rowIndex), function(accu, position) {
+        return accu + position;
+      }, 0);
+      return conflict > 1;
     },
 
     // test if any rows on this board contain conflicts
@@ -118,24 +110,21 @@
       for (var i = 0; i < thisN; i++) {
         if (boardMatrix[i][colIndex] === 1) {
           counter++;
-          if (counter > 1) {
-            return true;
-          }
         }
       }
-      return false; // fixme
+      return counter > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
       var boardMatrix = this.rows();
-      var thisN= this.get('n');
+      var thisN = this.get('n');
       for (var i = 0; i < thisN; i++) {
         if (this.hasColConflictAt(i)) {
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
 
 
@@ -153,11 +142,8 @@
           counter++;
         }
         majorDiagonalColumnIndexAtFirstRow++;
-        }
-        if (counter > 1) {
-            return true;
       }
-      return false; // fixme
+      return counter > 1;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -173,7 +159,7 @@
         }
       }
 
-      return false; // fixme
+      return false;
     },
 
 
@@ -191,11 +177,8 @@
           counter++;
         }
         minorDiagonalColumnIndexAtFirstRow--;
-        }
-        if (counter > 1) {
-            return true;
       }
-      return false; // fixme
+      return counter > 1;
     },
 
     // test if any minor diagonals on this board contain conflicts
@@ -217,7 +200,7 @@
           return true;
         }
       }
-      return false; // fixme
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
