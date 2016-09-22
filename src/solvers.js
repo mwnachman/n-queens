@@ -9,7 +9,7 @@
 // hint: you'll need to do a full-search of all possible arrangements of pieces!
 // (There are also optimizations that will allow you to skip a lot of the dead search space)
 // take a look at solversSpec.js to see what the tests are expecting
-
+ 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, 
 //with n rooks placed such that none of them can attack each other
@@ -52,7 +52,7 @@ window.countNRooksSolutions = function(n) {
 
 
 
-
+ 
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {

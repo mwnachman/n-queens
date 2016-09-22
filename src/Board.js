@@ -2,7 +2,7 @@
 // It's part of the Board Visualizer
 // The only portions you need to work on are the helper functions (below) 
 
-(function() { 
+(function() {  
 
   window.Board = Backbone.Model.extend({
 
@@ -113,7 +113,7 @@
         }
       }
       return counter > 1;
-    },
+    }, 
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
