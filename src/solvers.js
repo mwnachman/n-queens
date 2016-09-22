@@ -74,6 +74,8 @@ window.countNRooksSolutions = function(n) {
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
   var solution = undefined; //fixme
+
+  var nPassedIn = n;
   // console.log('n', n);
   if (n === 0) {
     solution = [];
@@ -96,17 +98,108 @@ window.findNQueensSolution = function(n) {
 
   var grid = new Board(grid);
 
-  var recursiveFunction = function(board, __) {
-    //TEXT
 
+  var hasOthersInColumn = function(columnIndex) {
+    var gridTemp = grid.rows();
+    var thisN = gridTemp[0].length;
+    for (var i = 0; i < thisN; i++) {
+      if (gridTemp[i][columnIndex] === 1) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  var hasOthersInRow = function(rowIndex) {
+    var gridTemp = grid.rows();
+    // console.log('gridtemp0', gridTemp[0]);
+    var thisN = gridTemp[0].length;
+    for (var i = 0; i < thisN; i++) {
+      // console.log('gridTemp', gridTemp);
+      if (gridTemp[rowIndex][i] === 1) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  var hasOthersInDiagonal = function(rowIndex, columnIndex) {
+    var gridTemp = grid.rows();
+    var thisN = gridTemp[0].length;
+    var majorIndex = columnIndex - rowIndex;
+    var minorIndex = rowIndex + columnIndex;
+    for (var i = 0; i < thisN; i++) {
+      if (gridTemp[i][majorIndex] === 1 || gridTemp[i][minorIndex] === 1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  var move1 = function(currRowIndex, currColIndex) {
+    var newRowIndex = currRowIndex + 1;
+    var newColIndex = currColIndex + 2; 
+    return [newRowIndex, newColIndex];
+  }
+
+  var move2 = function(currRowIndex, currColIndex) {
+    var newRowIndex = currRowIndex + 2;
+    var newColIndex = currColIndex + 1; 
+    return [newRowIndex, newColIndex];
+  }
+
+  var finalMove1 = function(currRowIndex, currColIndex) {
+    var newRowIndex = currRowIndex - 3;
+    var newColIndex = currColIndex - 1; 
+    return [newRowIndex, newColIndex];
+  }
+
+  var recursiveFunction = function(board, currRowIndex, currColIndex, n) {
+    if (n === nPassedIn) {
+      grid = board;
+      return grid;
+    }
+    else if (n + 1 === nPassedIn) {
+      var finalMove1Index = finalMove1(currRowIndex, currColIndex);
+      grid.get(finalMove1Index[0])[finalMove1Index[1]] = 1;
+      n++;
+    }
+    else {
+      var gridForNow = board.rows();
+      var newIndexArrayMove1 = move1(currRowIndex, currColIndex);
+      var newIndexArrayMove2 = move2(currRowIndex, currColIndex);
+      if (grid._isInBounds(newIndexArrayMove1[0], newIndexArrayMove1[1]) &&
+          !hasOthersInDiagonal(newIndexArrayMove1[0], newIndexArrayMove1[1]) &&
+          !hasOthersInRow(newIndexArrayMove1[0]) &&
+          !hasOthersInColumn(newIndexArrayMove1[1]) 
+          ) {
+        grid.get(newIndexArrayMove1[0])[newIndexArrayMove1[1]] = 1;
+        n++;
+        recursiveFunction(board, newIndexArrayMove1[0], newIndexArrayMove1[1], n);
+      }
+      else if (grid._isInBounds(newIndexArrayMove2[0], newIndexArrayMove2[1]) &&
+          !hasOthersInDiagonal(newIndexArrayMove2[0], newIndexArrayMove2[1]) &&
+          !hasOthersInRow(newIndexArrayMove2[0]) &&
+          !hasOthersInColumn(newIndexArrayMove2[1])
+          ){
+        grid.get(newIndexArrayMove2[0])[newIndexArrayMove2[1]] = 1;
+        n++;
+        recursiveFunction(board, newIndexArrayMove2[0], newIndexArrayMove2[1], n);
+      }
+    }
   };
 
 
   if (n > 3) {
+
     grid.get(0)[1] = 1;
     grid.get(2)[0] = 1;
     grid.get(3)[2] = 1;
-    recursiveFunction(grid, __);
+    if (n === 4) {
+      grid.get(1)[3] = 1;
+    } else {
+      recursiveFunction(grid, 3, 2, 3);
+    }
   }
 
   solution = grid.rows();
